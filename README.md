@@ -127,3 +127,61 @@ The database is recreated when the application restarts. Default restaurant loca
 - Thymeleaf server-side rendering
 - Dashboard visualization using Chart.js
 - Responsive UI design
+
+## Running Locally
+
+### Prerequisites
+
+Make sure you have the following installed:
+
+- Java 21
+- Git
+
+The project includes the Maven Wrapper, so Maven does not need to be installed separately.
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Bhavana-S28/harvestiq.git
+```
+
+```bash
+cd harvestiq
+```
+
+### 2. Set the demo user passwords
+
+HarvestIQ uses environment variables for the default Admin and Staff passwords.
+
+On macOS/Linux:
+
+```bash
+export HARVESTIQ_ADMIN_PASSWORD="your-admin-password"
+export HARVESTIQ_STAFF_PASSWORD="your-staff-password"
+```
+
+### 3. Run the application
+
+```bash
+./mvnw spring-boot:run
+```
+
+### 4. Open the application
+
+Open the application in your browser at:
+
+`http://localhost:8080`
+
+### Demo Users
+
+**Admin**
+
+- Email: `admin@harvestiq.com`
+- Password: the value set in `HARVESTIQ_ADMIN_PASSWORD`
+
+**Staff**
+
+- Email: `staff@harvestiq.com`
+- Password: the value set in `HARVESTIQ_STAFF_PASSWORD`
+
+> The application currently uses an in-memory H2 database for development, so application data is reset when the server restarts.
