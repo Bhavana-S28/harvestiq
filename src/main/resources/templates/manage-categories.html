@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="HarvestIQ helps food-service teams record, understand and reduce food waste through meaningful analytics.">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>HarvestIQ | Manage Categories</title>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Manage Categories</h1>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div th:replace="~{fragments/nav :: dashboardNav('categories')}"></div>
+        <div class="page-actions actions-spacing">
+            <a class="btn btn-primary" th:href="@{/admin/categories/new}">Add Category</a>
+        </div>
+
+        <p class="field-error" th:if="${errorMessage}" th:text="${errorMessage}"></p>
+
+        <table class="card">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Category Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="category : ${wasteCategories}">
+                    <td th:text="${category.id}"></td>
+                    <td th:text="${category.name}"></td>
+                    <td>
+                        <a class="btn btn-secondary btn-small"
+                            th:href="@{/admin/categories/{id}/edit(id=${category.id})}">Edit</a>
+                        <a class="btn btn-danger btn-small"
+                            th:href="@{/admin/categories/{id}/delete(id=${category.id})}">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </main>
+</body>
+
+</html>

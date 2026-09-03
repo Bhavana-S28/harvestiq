@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="HarvestIQ helps food-service teams record, understand and reduce food waste through meaningful analytics.">
+    <title>HarvestIQ | Delete Waste Record</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Delete Waste Record</h1>
+        </div>
+    </header>
+    <main class="container">
+        <nav th:replace="~{fragments/nav :: dashboardNav('waste-records')}"></nav>
+        <section class="details-card card">
+            <div class="details-item">
+                <strong>Food Item:</strong>
+                <span th:text="${wasteRecord.foodItem}"></span>
+            </div>
+
+            <div class="details-item">
+                <strong>Quantity:</strong>
+                <span>
+                    <span th:text="${#numbers.formatDecimal(wasteRecord.quantity, 1, 1)}"></span> kg
+                </span>
+            </div>
+
+            <div class="details-item">
+                <strong>Waste Category:</strong>
+                <span th:text="${wasteRecord.wasteCategory.name}"></span>
+            </div>
+
+            <div class="details-item">
+                <strong>Waste Reason:</strong>
+                <span th:text="${wasteRecord.wasteReason}"></span>
+            </div>
+
+            <div class="details-item">
+                <strong>Waste Date:</strong>
+                <span>
+                    <span th:text="${#temporals.format(wasteRecord.wasteDate, 'dd MMM')}"></span>
+                </span>
+            </div>
+
+            <div class="details-item">
+                <strong>Location:</strong>
+                <span th:text="${wasteRecord.location.name}"></span>
+            </div>
+        </section>
+
+        <div class="card">
+            <p>Are you sure you want to delete this waste record? This action cannot be undone.</p>
+
+            <form class="page-actions" th:action="@{/waste-records/{id}/delete(id=${wasteRecord.id})}" method="post">
+                <!-- <input type="hidden" th:field="*{id}">  this is not needed because the id is already in the URL -->
+                <button class="btn btn-danger" type="submit">Delete</button>
+                <a class="btn btn-secondary" th:href="@{/waste-records}">Cancel</a>
+            </form>
+        </div>
+
+    </main>
+</body>
+
+</html>

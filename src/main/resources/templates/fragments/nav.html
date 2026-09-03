@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+    <nav class="dashboard-nav" th:fragment="dashboardNav(activePage)">
+
+        <a th:classappend="${activePage == 'dashboard'} ? 'active' : ''" th:href="@{/dashboard}">Dashboard</a>
+        <a th:classappend="${activePage == 'record-waste'} ? 'active' : ''" th:href="@{/record-waste}">Record Waste</a>
+        <a th:classappend="${activePage == 'waste-records'} ? 'active' : ''" th:href="@{/waste-records}">Waste
+            Records</a>
+        <!-- Important: this is only a UI visibility rule. The actual security still comes from: .requestMatchers("/admin/**").hasRole("ADMIN") -->
+
+        <a sec:authorize="hasRole('ADMIN')" th:classappend="${activePage == 'locations'} ? 'active' : ''"
+            th:href="@{/admin/locations}">
+            Manage Locations
+        </a>
+
+        <a sec:authorize="hasRole('ADMIN')" th:classappend="${activePage == 'categories'} ? 'active' : ''"
+            th:href="@{/admin/categories}">
+            Manage Categories
+        </a>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Logout</button>
+        </form>
+
+    </nav>
+</body>
+
+</html>

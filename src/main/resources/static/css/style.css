@@ -1,0 +1,434 @@
+*{
+    box-sizing: border-box;
+}
+
+:root{
+    --primary-color: #2f6f4e;
+    --background-color: #eef3ef;
+    --surface-color: #ffffff;
+    --text-color: #1f2937;
+    --border-color: #d1d5db;
+    --primary-hover: #255c40;
+    --danger-color: #b42318;
+    --danger-hover: #912018;
+    --secondary-hover: #f1f5f2;
+}
+
+body{
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+button{
+    background-color: var(--primary-color);
+}
+
+.container{
+    max-width: 1200px;
+    margin:0 auto;
+    padding: 24px;
+}
+
+.card{
+    background-color: var(--surface-color);
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0.08);
+    margin-bottom: 24px;
+}
+
+.filters{
+    display:flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+input,
+select,
+textarea{
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    outline: 2px solid var(--primary-color);
+    outline-offset: 1px;
+}
+
+.btn{
+    padding: 10px 12px;
+    border: none;
+    border-radius: 6px;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary{
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover{
+    background-color: var(--primary-hover);
+}
+
+.btn-secondary{
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover{
+    background-color: var(--secondary-hover);
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--surface-color);
+}
+
+th,td{
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th{
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+tbody tr:hover{
+    background-color: #f8faf8;
+}
+
+.btn-small{
+    padding: 6px 10px;
+    font-size: 14px;
+}
+
+.btn-danger{
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn-danger:hover{
+    background-color: var(--danger-hover);
+}
+
+.table-card{
+    background-color: var(--surface-color);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: auto;
+}
+
+.actions{
+    display: flex;
+    gap: 8px;
+}
+
+.pagination{
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.form-section{
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.form-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-section legend{
+    font-weight: 600;
+    color: var(--primary-color);
+    padding: 0 8px;
+}
+
+.message{
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.message-success{
+    background-color: #e8f5ec;
+    color: #25613b;
+    border: 1px solid #b7dfc2;
+}
+
+.field-error{
+    color: var(--danger-color);
+    font-size: 14px;
+}
+
+textarea{
+    resize: vertical;
+}
+
+.details-card{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 768px){
+    .form-grid{
+        grid-template-columns: 1fr;
+    }
+    .details-card{
+        grid-template-columns: 1fr;
+    }
+}
+
+.details-item{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.page-actions{
+    display: flex;
+    gap: 8px;
+}
+
+.login-form{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+.actions-spacing{
+    margin-bottom: 20px;
+}
+
+/* dashboard */
+
+.dashboard-metrics{
+    display: grid;
+    /* grid-template-columns: 1fr 1fr 1fr 1fr; */
+    /* Create as many columns as comfortably fit, but don't let a card become narrower than 180px. */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.metric-card,
+.highlight-card,
+.breakdown-card,
+.trend-card,
+.recent-records{
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.metric-card strong{
+    /* the <strong> takes its own line with block property */
+    display: block;
+}
+
+.metric-value{
+    /* makes the metric prominent. */
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.dashboard-highlights{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+.highlight-value{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+/* The > means  -  Only select a <span> that is a direct child of .highlight-value. */
+.highlight-value > span:first-child{
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.dashboard-breakdowns{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+}
+.breakdown-row{
+    display: flex;
+    /* space-between -- You have two flex items: Normally they sit next to each other. puts all the space between them */
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.breakdown-row:last-child{
+    border-bottom: none;
+}
+
+.dashboard-content{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.dashboard-nav{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    /* If there isn't enough space, move items onto another line. */
+    flex-wrap: wrap;
+}
+
+.dashboard-nav form{
+    margin-left: auto;
+}
+
+.dashboard-nav a{
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+.dashboard-nav a:hover{
+    background-color: #e2e8e5;
+}
+
+.dashboard-nav a.active{
+    background-color: #2f7d57;
+    color: white;
+    font-weight: 600;
+}
+
+.dashboard-nav a.active:hover{
+    background-color: #2f7d57;
+}
+
+.dashboard-nav button{
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #2f7d57;
+    color: white;
+    cursor: pointer;
+}
+
+.dashboard-nav button:hover{
+    background-color: #256747;
+}
+
+@media (max-width: 600px){
+
+    .dashboard-metrics{
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-nav{
+        flex-direction: row;
+        align-items: stretch;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .dashboard-nav form{
+        margin-left: 0;
+    }
+}
+
+.dashboard-content h2{
+    font-size: 1.2rem;
+    margin: 0 0 12px 0;
+}
+
+.chart-container{
+    position: relative;
+    height: 220px;
+    margin: 16px 0;
+}
+
+.trend-chart-container{
+    position: relative;
+    height: 280px;
+    margin-bottom: 16px;
+}
+
+.table-container{
+    overflow-x: auto;
+}
+
+.login-page {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 420px;
+}
+
+.login-heading {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.login-heading h1 {
+    margin-bottom: 6px;
+}
+
+.login-heading p {
+    margin: 0;
+}
+
+.login-form h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.login-form .btn {
+    width: 100%;
+}
+
+.optional{
+    font-size: 0.85rem;
+    color: #6b7280;
+    font-weight: normal;
+}

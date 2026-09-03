@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="HarvestIQ helps food-service teams record, understand and reduce food waste through meaningful analytics.">
+    <title>HarvestIQ | Waste Records</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Waste Records</h1>
+        </div>
+    </header>
+    <main class="container">
+
+        <div th:replace="~{fragments/nav :: dashboardNav('waste-records')}"></div>
+
+        <!-- logout
+        <form th:action="@{/logout}" method="POST">
+            <button class="btn btn-secondary" type="submit">Logout</button>
+        </form> -->
+
+        <form class="card filters" th:action="@{/waste-records}" method="GET">
+            <div class="form-group">
+                <label for="foodItem">Search by Food Item:</label>
+                <!-- th:value="${param.foodItem}" is used to retain the search term in the input field after the form is submitted. It binds the value of the input field to the request parameter named "foodItem". If a user searches for a specific food item, this value will be displayed in the input field when the page reloads, allowing users to see what they searched for and modify it if needed. -->
+                <!-- <input type="text" id="foodItem" name="foodItem" th:value="${param.foodItem}" placeholder="e.g. Bread"> -->
+                <input type="text" id="foodItem" name="foodItem" th:value="${foodItem}" placeholder="e.g. Bread">
+            </div>
+            <div class="form-group">
+                <label for="locationId">Location</label>
+                <select id="locationId" name="locationId">
+                    <option value="">All locations</option>
+                    <!-- if this option's ID equals the requested location ID, add the selected attribute." -->
+                    <!-- <option th:each="location: ${restaurantLocations}" th:text="${location.name}" th:value="${location.id}"
+                    th:selected="${param.locationId != null and param.locationId[0] ==location.id.toString()}"> -->
+                    <option th:each="location: ${restaurantLocations}" th:text="${location.name}"
+                        th:value="${location.id}" th:selected="${location.id == locationId}">
+
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="wasteCategoryId">Category</label>
+                <select id="wasteCategoryId" name="wasteCategoryId">
+                    <option value="">All Categories</option>
+                    <option th:each="wasteCategory : ${wasteCategories}" th:text="${wasteCategory.name}"
+                        th:value="${wasteCategory.id}" th:selected="${wasteCategory.id == wasteCategoryId}"></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="fromDate">From Date:</label>
+                <input type="date" id="fromDate" name="fromDate" th:value="${fromDate}">
+            </div>
+
+            <div class="form-group">
+                <label for="toDate">To Date:</label>
+                <input type="date" id="toDate" name="toDate" th:value="${toDate}">
+            </div>
+
+            <div class="form-group">
+                <label for="sortBy">Sort By:</label>
+                <select id="sortBy" name="sortBy">
+                    <option value="">Default</option>
+                    <option value="wasteDate" th:selected="${sortBy == 'wasteDate'}">Waste Date</option>
+                    <option value="quantity" th:selected="${sortBy == 'quantity'}">Quantity</option>
+                    <option value="foodItem" th:selected="${sortBy == 'foodItem'}">Food Item</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="direction">Direction:</label>
+                <select id="direction" name="direction">
+                    <option value="">Default</option>
+                    <option value="asc" th:selected="${direction == 'asc'}">Ascending</option>
+                    <option value="desc" th:selected="${direction == 'desc'}">Descending</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="size">Records per page:</label>
+                <select id="size" name="size">
+                    <option value="5" th:selected="${size == 5}">5</option>
+                    <option value="10" th:selected="${size == 10}">10</option>
+                    <option value="20" th:selected="${size == 20}">20</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Search</button>
+            <a class="btn btn-secondary" th:href="@{/waste-records}">Reset</a>
+        </form>
+        <p th:if="${errorMessage}" th:text="${errorMessage}"></p>
+
+        <div th:if="${errorMessage == null and wasteRecords.isEmpty()}">
+            <p>No waste records found.</p>
+        </div>
+
+        <!-- <table th:unless="${wasteRecords.isEmpty()}"> -->
+        <div class="table-card" th:if="${errorMessage == null and !wasteRecords.isEmpty()}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Food Item</th>
+                        <th>Quantity</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- its page now so wasteRecords.content -->
+                    <tr th:each="wasteRecord : ${wasteRecords.content}">
+                        <td th:text="${wasteRecord.foodItem}"></td>
+                        <td>
+                            <span th:text="${#numbers.formatDecimal(wasteRecord.quantity, 1, 1)}"></span> kg
+                        </td>
+                        <td th:text="${wasteRecord.wasteCategory.name}"></td>
+                        <td>
+                            <span th:text="${#temporals.format(wasteRecord.wasteDate, 'dd MMM')}"></span>
+                        </td>
+                        <td th:text="${wasteRecord.location.name}"></td>
+                        <td class="actions">
+                            <a class="btn btn-secondary btn-small"
+                                th:href="@{/waste-records/{id}(id=${wasteRecord.id})}">View</a>
+                            <a class="btn btn-primary btn-small"
+                                th:href="@{/waste-records/{id}/edit(id=${wasteRecord.id})}">Edit</a>
+                            <a class="btn btn-danger btn-small"
+                                th:href="@{/waste-records/{id}/delete(id=${wasteRecord.id})}">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination" th:if="${errorMessage == null and !wasteRecords.isEmpty()}">
+            <a class="btn btn-secondary btn-small" th:if="${wasteRecords.hasPrevious()}" th:href="@{/waste-records(
+                                                        foodItem=${foodItem},
+                                                        locationId=${locationId},
+                                                        wasteCategoryId=${wasteCategoryId},
+                                                        fromDate=${fromDate},
+                                                        toDate=${toDate},
+                                                        sortBy=${sortBy},
+                                                        direction=${direction},
+                                                        page=${wasteRecords.number - 1},
+                                                        size=${size}
+                                                        )}">
+                Previous</a>
+            <span>
+                Page
+                <span th:text="${wasteRecords.number + 1}"></span>
+                of
+                <span th:text="${wasteRecords.totalPages}"></span>
+            </span>
+            <a class="btn btn-secondary btn-small" th:if="${wasteRecords.hasNext()}" th:href="@{/waste-records(
+                                                            foodItem=${foodItem},
+                                                            locationId=${locationId},
+                                                            wasteCategoryId=${wasteCategoryId},
+                                                            fromDate=${fromDate},
+                                                            toDate=${toDate},
+                                                            sortBy=${sortBy},
+                                                            direction=${direction},
+                                                            page=${wasteRecords.number + 1},
+                                                            size=${size}
+                                                            )}">
+                Next</a>
+        </div>
+    </main>
+
+</body>
+
+</html>

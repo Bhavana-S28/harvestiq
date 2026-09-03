@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="HarvestIQ helps food-service teams record, understand and reduce food waste through meaningful analytics.">
+    <title>HarvestIQ | Login</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+
+    <!-- main.container      → controls page width + spacing
+form.card           → white card + padding + shadow + rounded corners
+div.form-group      → label/input vertically arranged
+p.field-error       → error styling
+.btn.btn-primary    → existing primary button -->
+
+    <main class="login-page">
+        <div class="login-container">
+
+            <div class="login-heading">
+                <h1>HarvestIQ</h1>
+                <p>Food Waste Analytics</p>
+            </div>
+
+            <!-- /login?error -->
+            <form class="card login-form" th:action="@{/login}" method="post">
+
+                <h2>Welcome Back</h2>
+                <p class="message message-success" th:if="${param.logout}">
+                    You have been logged out successfully.
+                </p>
+                <p class="field-error" th:if="${param.error}">Invalid email or password.</p>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <button class="btn btn-primary" type="submit">Sign In</button>
+            </form>
+        </div>
+
+    </main>
+</body>
+
+</html>

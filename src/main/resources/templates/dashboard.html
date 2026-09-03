@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="HarvestIQ helps food-service teams record, understand and reduce food waste through meaningful analytics.">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>HarvestIQ | Dashboard</title>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <h1>HarvestIQ Dashboard</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <div th:replace="~{fragments//nav :: dashboardNav('dashboard')}"></div>
+
+        <div class="dashboard-content">
+            <section>
+                <h2>Overview</h2>
+                <div class="dashboard-metrics">
+                    <div class="metric-card">
+                        <strong>Total Waste</strong>
+                        <div class="metric-value">
+                            <!-- atleast one digit before decimal and only one digit after the decimal -->
+                            <span th:text="${#numbers.formatDecimal(totalWasteQuantity, 1, 1)}"></span> kg
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <strong>Waste Records</strong>
+                        <div class="metric-value">
+                            <span th:text="${totalWasteRecords}"></span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <strong>Waste This Week</strong>
+                        <div class="metric-value">
+                            <span th:text="${#numbers.formatDecimal(wasteThisWeek, 1, 1)}"></span> kg
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <strong>Waste This Month</strong>
+                        <div class="metric-value">
+                            <span th:text="${#numbers.formatDecimal(wasteThisMonth, 1, 1)}"></span> kg
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <section>
+                <h2>Highlights</h2>
+                <div class="dashboard-highlights">
+                    <div class="highlight-card">
+                        <strong>Top Waste Category</strong>
+
+                        <div class="highlight-value" th:if="${topWasteCategory != null}">
+                            <span th:text="${topWasteCategory.categoryName}"></span>
+                            <span>
+                                <span th:text="${#numbers.formatDecimal(topWasteCategory.totalQuantity, 1, 1)}"></span>
+                                kg
+                            </span>
+                        </div>
+                        <span th:unless="${topWasteCategory != null}">
+                            No data
+                        </span>
+                    </div>
+
+                    <div class="highlight-card">
+                        <strong>Top Waste Location</strong>
+                        <div class="highlight-value" th:if="${topWasteLocation != null}">
+                            <span th:text="${topWasteLocation.locationName}"></span>
+                            <span>
+                                <span th:text="${#numbers.formatDecimal(topWasteLocation.totalQuantity, 1, 1)}"></span>
+                                kg
+                            </span>
+                        </div>
+                        <span th:unless="${topWasteLocation != null}">
+                            No data
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+
+
+            <section>
+                <h2>Waste Breakdown</h2>
+
+                <div class="dashboard-breakdowns">
+                    <div class="breakdown-card">
+                        <strong>Waste by Category</strong>
+                        <div class="chart-container" th:if="${!wasteByCategory.isEmpty()}">
+                            <canvas id="categoryWasteChart"></canvas>
+                        </div>
+
+                        <div th:if="${!wasteByCategory.isEmpty()}">
+                            <div class="breakdown-row" th:each="summary : ${wasteByCategory}">
+                                <span th:text="${summary.categoryName}"></span>
+                                <span>
+                                    <span th:text="${#numbers.formatDecimal(summary.totalQuantity, 1, 1)}"></span> kg
+                                </span>
+                            </div>
+                        </div>
+                        <div th:if="${wasteByCategory.isEmpty()}">
+                            No data
+                        </div>
+
+                    </div>
+
+                    <div class="breakdown-card">
+                        <strong>Waste by Location</strong>
+                        <div class="chart-container" th:if="${!wasteByLocation.isEmpty()}">
+                            <canvas id="locationWasteChart"></canvas>
+                        </div>
+                        <div th:if="${!wasteByLocation.isEmpty()}">
+                            <div class="breakdown-row" th:each="summary : ${wasteByLocation}">
+                                <span th:text="${summary.locationName}"></span>
+                                <span>
+                                    <span th:text="${#numbers.formatDecimal(summary.totalQuantity, 1, 1)}"></span> kg
+                                </span>
+                            </div>
+                        </div>
+                        <div th:if="${wasteByLocation.isEmpty()}">
+                            No data
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Waste Trend</h2>
+                <div class="trend-card">
+                    <div class="trend-chart-container" th:if="${!wasteByDate.isEmpty()}">
+                        <canvas id="wasteTrendChart"></canvas>
+                    </div>
+                    <div th:if="${!wasteByDate.isEmpty()}">
+                        <div class="breakdown-row" th:each="summary : ${wasteByDate}">
+                            <span th:text="${#temporals.format(summary.wasteDate, 'dd MMM')}"></span>
+                            <span>
+                                <span th:text="${#numbers.formatDecimal(summary.totalQuantity, 1, 1)}"></span> kg
+                            </span>
+                        </div>
+                    </div>
+                    <div th:if="${wasteByDate.isEmpty()}">
+                        No data
+                    </div>
+                </div>
+            </section>
+
+
+            <section>
+                <div class="recent-records">
+
+                    <h2>Recent Waste Records</h2>
+                    <div class="table-container" th:if="${!recentWasteRecords.isEmpty()}">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Food Item</th>
+                                    <th>Quantity</th>
+                                    <th>Category</th>
+                                    <th>Date</th>
+                                    <th>Location</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="wasteRecord : ${recentWasteRecords}">
+                                    <td th:text="${wasteRecord.foodItem}"></td>
+                                    <td>
+                                        <span th:text="${#numbers.formatDecimal(wasteRecord.quantity, 1, 1)}"></span> kg
+                                    </td>
+                                    <td th:text="${wasteRecord.wasteCategory.name}"></td>
+                                    <td th:text="${#temporals.format(wasteRecord.wasteDate, 'dd MMM')}"></td>
+                                    <td th:text="${wasteRecord.location.name}"></td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p th:if="${recentWasteRecords.isEmpty()}">
+                        <span>No recent waste records.</span>
+                    </p>
+
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--Thymeleaf Javascript inlining - It tells Thymeleaf: The content inside this <script> is JavaScript, and I want to insert server-side Thymeleaf values into it. -->
+    <script th:inline="javascript">
+        const wasteByCategory = /*[[${wasteByCategory}]]*/[];
+        const categoryLabel = wasteByCategory.map(summary => summary.categoryName);
+        const categoryData = wasteByCategory.map(summary => summary.totalQuantity);
+        const categoryCanvas = document.getElementById("categoryWasteChart");
+        if (categoryCanvas) {
+            new Chart(categoryCanvas, {
+                type: "doughnut",
+                data: {
+                    labels: categoryLabel,
+                    datasets: [
+                        {
+                            label: "Waste (kg)",
+                            data: categoryData,
+                            backgroundColor: [
+                                "#2f7d57",
+                                "#65a67f",
+                                "#9bc5aa",
+                                "#c5dfcf",
+                                "#e0eee5"
+                            ]
+                        }
+                    ]
+                }
+
+            });
+        }
+
+        const wasteByLocation = /*[[${wasteByLocation}]]*/[];
+        const locationLabel = wasteByLocation.map(summary => summary.locationName);
+        const locationData = wasteByLocation.map(summary => summary.totalQuantity);
+        const locationCanvas = document.getElementById("locationWasteChart");
+        if (locationCanvas) {
+            new Chart(locationCanvas, {
+                type: "doughnut",
+                data: {
+                    labels: locationLabel,
+                    datasets: [
+                        {
+                            label: "Waste (kg)",
+                            data: locationData,
+                            backgroundColor: [
+                                "#2f7d57",
+                                "#65a67f",
+                                "#9bc5aa",
+                                "#c5dfcf",
+                                "#e0eee5"
+                            ]
+                        }
+                    ]
+                }
+            });
+        }
+
+        const wasteByDate = /*[[${wasteByDate}]]*/[];
+        const dateLabel = wasteByDate.map(summary => new Date(summary.wasteDate).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short"
+        }));
+        const dateData = wasteByDate.map(summary => summary.totalQuantity);
+        const trendCanvas = document.getElementById("wasteTrendChart");
+        if (trendCanvas) {
+            new Chart(trendCanvas, {
+                type: "line",
+                data: {
+                    labels: dateLabel,
+                    datasets: [
+                        {
+                            label: "Waste (kg)",
+                            data: dateData,
+                            borderColor: "#2f7d57",
+                            backgroundColor: "#2f7d57"
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>
